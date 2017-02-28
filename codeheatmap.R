@@ -64,9 +64,8 @@ heatmapresults<-melt(results)
 heatmapresults$name <- as.character(heatmapresults$name)
 heatmapresults$name <- factor(heatmapresults$name, levels=unique(heatmapresults$name))
 # this prints specifies where/how to save the output
-jpeg(filename="heatmap.jpg", width=1800, height=1800)
 #this is the ggplot magic. mostly I have changed the colors, changed the text size, made the x axis on top, with vertical text, and made the y axis start from the top down 
-ggplot(heatmapresults, aes(variable,name)) + geom_tile(aes(fill = value), colour = "white") + scale_fill_viridis() + theme(text = element_text(size=10), axis.text.x = element_text(angle=90, hjust=0), legend.key.size = unit(1.0, "cm"), legend.text = element_text(size = 20)) +  scale_x_discrete(position = "top") +  scale_y_discrete(name="", limits = rev(levels(heatmapresults$name)))
-#this just closes the jpeg command
+jpeg(filename="heatmap.jpg", width=1800, height=1800)
+ggplot(heatmapresults, aes(variable,name)) + geom_tile(aes(fill = value), colour = "white") + scale_fill_viridis() + theme(text = element_text(size=10), axis.text.x = element_text(angle=90, hjust=0), legend.key.size = unit(1.0, "cm"), legend.text = element_text(size = 20)) +  scale_x_discrete(name="Batter", position = "top") +  scale_y_discrete(name="", limits = rev(levels(heatmapresults$name))) + labs(title = "Similarity Score for 2016 Qualified Hitters")
 dev.off()
   
