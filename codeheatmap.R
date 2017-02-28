@@ -1,9 +1,14 @@
+#puts the data in a data frame
 batterraw<-read.csv("batterdata.csv")
+# you need all these extra packages. if you have not used these before, you have to install them first with install.packages("nameofpackage") 
 library(dplyr)
 library(ggplot2)
 library(reshape2)
 library(viridis)
+
+#changing the messed up name label
 names(batterraw)[1]<-"name"
+#making this not a factor, because that causes problems
 batterraw$name<-as.character(batterraw$name)
 #picking out the parameters I'm interested in
 batterraw<- batterraw %>% select(name,PA,X1B,X2B,X3B,HR,BB,SO)
@@ -46,16 +51,22 @@ for (i in 1:n){
       matches<-rbind(matches,data.frame("number"=simscore,stringsAsFactors=FALSE))
     } 
   }
- 
+ #all results are stored here (not just most and least similar)
   results<-cbind(results,matches)
 }
 
+#making sure the resulting data frame is well labeled
 names(results)<-c("name",batterraw$name)
 
+# reshaping the results table for heatmap purposes
 heatmapresults<-melt(results)
+# this has to do with the order things appear in the heat map
 heatmapresults$name <- as.character(heatmapresults$name)
 heatmapresults$name <- factor(heatmapresults$name, levels=unique(heatmapresults$name))
+# this prints specifies where/how to save the output
 jpeg(filename="heatmap.jpg", width=1800, height=1800)
+#this is the ggplot magic. mostly I have changed the colors, changed the text size, made the x axis on top, with vertical text, and made the y axis start from the top down 
 ggplot(heatmapresults, aes(variable,name)) + geom_tile(aes(fill = value), colour = "white") + scale_fill_viridis() + theme(text = element_text(size=10), axis.text.x = element_text(angle=90, hjust=0), legend.key.size = unit(1.0, "cm"), legend.text = element_text(size = 20)) +  scale_x_discrete(position = "top") +  scale_y_discrete(name="", limits = rev(levels(heatmapresults$name)))
+#this just closes the jpeg command
 dev.off()
   

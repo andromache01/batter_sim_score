@@ -1,6 +1,10 @@
+#puts the data in a data frame
 batterraw<-read.csv("batterdata.csv")
+# you need all this packages. if you have not used it before, you have to install them first with install.packages("nameofpackage") 
 library(dplyr)
+#changing the messed up name label
 names(batterraw)[1]<-"name"
+#making this not a factor, because that causes problems
 batterraw$name<-as.character(batterraw$name)
 #picking out the parameters I'm interested in
 batterraw<- batterraw %>% select(name,PA,X1B,X2B,X3B,HR,BB,SO)
@@ -60,4 +64,4 @@ for (i in 1:n){
     
 }
 
-  
+#now you can go look at the results data frame
